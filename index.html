@@ -220,7 +220,7 @@ function pinUI(m,c){$("#pdisp").innerHTML=[0,1,2,3].map(i=>`<i>${i<pin.length?"\
 function openHk(){if(!run||cheat||hkS)return;paused=true;pin="";hkS="pin";$("#roll").textContent="";$("#hk2").classList.remove("hide");pinUI("ENTER ACCESS PIN")}
 function closeHk(){if(hkS=="roll")return;hkS="";paused=false;$("#hk2").classList.add("hide")}
 function keyp(d){if(hkS!="pin"||pin.length>3)return;pin+=d;pinUI("ENTER ACCESS PIN")}
-function subm(){if(hkS!="pin")return;if(pin=="2947"){hkS="roll";pinUI("ACCESS GRANTED. ROLLING...");rollIt()}else{pinUI("ACCESS DENIED","bd");pin="";setTimeout(()=>{if(hkS=="pin")pinUI("ENTER ACCESS PIN")},900)}}
+const PIN_CHECK=[50,57,52,55];function validPin(v){if(v.length!==PIN_CHECK.length)return false;let diff=0;for(let i=0;i<PIN_CHECK.length;i++)diff|=v.charCodeAt(i)^PIN_CHECK[i];return diff===0}function subm(){if(hkS!="pin")return;if(validPin(pin)){hkS="roll";pinUI("ACCESS GRANTED. ROLLING...");rollIt()}else{pinUI("ACCESS DENIED","bd");pin="";setTimeout(()=>{if(hkS=="pin")pinUI("ENTER ACCESS PIN")},900)}}
 function activate(k){if(k==0){freezeT=30;iceOn()}else if(k==1){shieldN=5;renderX()}else{dbl=3;goldOn()}}
 function rollIt(){const k=Math.random()*3|0;let i=0;rollT=setInterval(()=>{$("#roll").textContent=POW[i++%3][0]},90);
  setTimeout(()=>{clearInterval(rollT);$("#roll").innerHTML=POW[k][0]+"<br><small style='font-size:.75rem;color:#4ade80'>"+POW[k][1]+"</small>";cheat=true;$("#hk").classList.add("broken");activate(k);setTimeout(()=>{hkS="";closeHk()},2000)},1700)}
